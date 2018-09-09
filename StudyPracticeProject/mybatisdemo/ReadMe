@@ -1,0 +1,42 @@
+1.mybatis的原始操作
+    创建流对象，如inputStream；
+    读取配置文件；
+    创建sqlssion工厂；
+    创建session；
+    通过指定namespace+id，指定操作的具体内容使用session的操作方法
+
+    //查还可以通过以下方式查询
+    通过session的getmapper读取mapper类并创建mapper接口(或dao)对象
+    执行查询
+
+    //增删改需要提交，查不需要提交
+    提交
+    关闭session
+2.别名处理
+    当出现数据库列名为：author_id;Pojo属性名为：authorId;时，在查询的时候，这个属性是不会被查出来的，所以如果打印查询出字段会发现这个属性是null
+    处理这种问题有以下方法：
+        （1）sql语句中定义别名：
+            <select id="selectTbUser" resultType="pojo.TbUser" parameterType="int">
+                select
+                Id,
+                title,
+                author_id AS authorId,
+                state
+                from tb_user where id = #{id}
+            </select>
+        （2）使用resultMap（mapper文件中）：
+            在resultMap中至少要定义一个主键列<id>，使用<result>定义其他列，
+        cloumn表示表中的列名，property表示实体类中的字段，jdbcType是可选的参数，mybatis可以自动识别，可以省略。
+            <resultMap type="TbUser" id="tbUserResultMap">
+                <id column="id" property="id" jdbcType="INTEGER" />
+                <result column="author_id" property="authorId" jdbcType="INTEGER" />
+            </resultMap>
+        （3）set全局配置下划线与大小写问题（在mybatis-config中进行全局配置）
+            <settings>
+                 <!--全局设置数据库列表名下划线与实体类属性名大小写问题-->
+                 <setting name="mapUnderscoreToCamelCass" value="true"/>
+            </settings>
+3.执行插入后，id的回填问题
+4.动态sql---where set if trim choose otherwise foreach等等
+5.模糊查询和排序与分页问题
+6.缓存和延迟加载

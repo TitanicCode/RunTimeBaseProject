@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--配置包扫描-->
+    <context:component-scan base-package="com.common.custom.controller"/>
+
+    <!--视图解析器-->
+    <!--InternalResourceViewResolver是针对于JSP的解析器，视图解析器作用在于实现controller中return路径到网页的跳转-->
+    <!--p:**是定义controller中return路径前缀和后缀，定义完成后，controller中return路径 return "/Web-INF/jsp/index.jsp";可以改为return "index";-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"/>
+
+    <!-- 配置注解驱动 -->
+    <mvc:annotation-driven />
+
+    <!-- 处理静态资源 -->
+    <!-- 所有以/css路径开头的请求经过springMVC的DispatcherServlet不进入controller找@RequestMapping，而是进入DispatcherServlet的ResourceHttpRequestHandler 进行处理-->
+    <mvc:resources mapping="/css/**" location="/css/"/>
+    <mvc:resources mapping="/image/**" location="/image/"/>
+    <mvc:resources mapping="/js/**" location="/js/"/>
+    <!--<!--default-servlet-handler设置是自动检测到静态资源类型，如果是css，就转到css对应的容器处理，如果是jsp，就转到jsp对应容器处理，不用单独分开罗列所有resources设置，但是缺点是效率低。-->
+    <mvc:default-servlet-handler/> -->
+
+    <!--&lt;!&ndash;配置验证码生成器&ndash;&gt;-->
+    <!--<bean id="producer" class="com.google.code.kaptcha.impl.DefaultKaptcha" scope="singleton">-->
+        <!--<property name="config">-->
+            <!--<bean class="com.google.code.kaptcha.util.Config">-->
+                <!--<constructor-arg>-->
+                    <!--<props>-->
+                        <!--<prop key="kaptcha.border">no</prop>-->
+                        <!--<prop key="kaptcha.textproducer.font.color">black</prop>-->
+                        <!--<prop key="kaptcha.textproducer.char.length">5</prop>-->
+                    <!--</props>-->
+                <!--</constructor-arg>-->
+            <!--</bean>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <!--多个拦截器,顺序执行 -->
+        <mvc:interceptor>
+            <!-- /**可以拦截路径不管多少层 -->
+            <mvc:mapping path="/**"/>
+            <!--设置不拦截css目录下的所有文件-->
+            <mvc:exclude-mapping path="/css/**"/>
+            <bean class="api.interceptor.LoginInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!--&lt;!&ndash;配置 MultipartResolver  处理文件上传&ndash;&gt;-->
+    <!--<bean id="multipartResolver"     class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
+        <!--<property name="defaultEncoding" value="UTF-8"/> &lt;!&ndash; 默认编码 (ISO-8859-1) &ndash;&gt;-->
+        <!--<property name="maxInMemorySize" value="10240"/> &lt;!&ndash; 最大内存大小 (10240)&ndash;&gt;-->
+        <!--<property name="uploadTempDir" value="/upload/"/> &lt;!&ndash; 上传后的目录名 &ndash;&gt;-->
+        <!--<property name="maxUploadSize" value="-1"/> &lt;!&ndash; 最大文件大小，单位是字节，-1为无限制 &ndash;&gt;-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; 保证实现了Shiro内部lifecycle函数的bean执行 &ndash;&gt;-->
+    <!--<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>-->
+
+    <!--&lt;!&ndash;用于启用shiro注解配置，这个必须要配置到springmvc-servlet.xml的中，要保证最后执行，否则会因为参数缺失而配置出错&ndash;&gt;-->
+    <!--&lt;!&ndash; 保证实现了Shiro内部lifecycle函数的bean执行 &ndash;&gt;-->
+    <!--<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>-->
+
+    <!--&lt;!&ndash; 开启Shiro的注解(如@RequiresRoles,@RequiresPermissions),需借助SpringAOP扫描使用Shiro注解的类,并在必要时进行安全逻辑验证 &ndash;&gt;-->
+    <!--&lt;!&ndash; 配置以下两个bean即可实现此功能 &ndash;&gt;-->
+    <!--&lt;!&ndash; Enable Shiro Annotations for Spring-configured beans. Only run after the lifecycleBeanProcessor has run &ndash;&gt;-->
+    <!--&lt;!&ndash; 由于本例中并未使用Shiro注解,故注释掉这两个bean(个人觉得将权限通过注解的方式硬编码在程序中,查看起来不是很方便,没必要使用) &ndash;&gt;-->
+    <!--&lt;!&ndash;   &ndash;&gt;-->
+    <!--<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>-->
+    <!--<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">-->
+    <!--<property name="securityManager" ref="securityManager"/>-->
+    <!--</bean>-->
+
+</beans>

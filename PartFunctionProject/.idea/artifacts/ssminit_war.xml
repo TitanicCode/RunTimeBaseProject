@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ssminit:war">
+    <output-path>$PROJECT_DIR$/ssminit/target</output-path>
+    <root id="archive" name="MybatisSsmMoudle-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="ssminit:war exploded" />
+    </root>
+  </artifact>
+</component>

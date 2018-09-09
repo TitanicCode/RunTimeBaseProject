@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--<typeAliases>-->
+    <!--&lt;!&ndash;方法一：一次定义一个对象别名，每个对象需要单独设置&ndash;&gt;-->
+    <!--<typeAlias type="pojo.TbUser" alias="TbUser"/>-->
+    <!--&lt;!&ndash;方法二：设置包扫描&ndash;&gt;-->
+    <!--<package name="pojo"/>-->
+    <!--</typeAliases>-->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/study_practice?characterEncoding=utf-8"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <package name="com.custom.dao"/>
+    </mappers>
+</configuration>

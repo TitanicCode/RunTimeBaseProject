@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+    <!-- 扫描dao -->
+    <context:component-scan base-package="com.common.custom.dao" />
+
+    <!-- 加载数据库配置文件和其他配置文件 -->
+    <context:property-placeholder location="classpath:db.properties" />
+
+    <!-- 数据库连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close">
+        <property name="url" value="${jdbc.jdbcUrl}" />
+        <property name="username" value="${jdbc.user}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="driverClassName" value="${jdbc.driverClass}" />
+        <!-- 初始化连接大小 -->
+        <property name="initialSize" value="0" />
+        <!-- 连接池最大使用连接数量 -->
+        <property name="maxActive" value="20" />
+        <!-- 连接池最小空闲 -->
+        <property name="minIdle" value="0" />
+        <!-- 获取连接最大等待时间 -->
+        <property name="maxWait" value="60000" />
+    </bean>
+
+    <util:properties id="hibernateProperties">
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQL57Dialect</prop>
+        <prop key="hibernate.show_sql">true</prop>
+        <prop key="hibernate.format_sql">true</prop>
+        <prop key="hibernate.hbm2ddl.auto">update</prop>
+        <!--单独使用hibernate时才需要的配置-->
+        <!--<prop key="current_session_context_class">thread</prop>-->
+    </util:properties>
+
+    <!-- 创建session工厂-->
+    <!--用spring的session，整合hibernate的时候要注意版本号，版本号不同配置不同，本程序用的是hibernate5-->
+    <!--所以自己在网上搜配置文件时，要规定好spring和hibernate版本号前两位；例如搜：spring4.3与hibernate5.2整合-->
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <!-- 将连接池注入到sessionFactory -->
+        <property name="dataSource" ref="dataSource" />
+        <!-- 配置hibernate基本信息 -->
+        <property name="hibernateProperties" ref="hibernateProperties" />
+        <!-- 扫描实体类的位置（jpa注解使用该语句配置） -->
+        <property name="packagesToScan" value="api.pojo" />
+        <!-- 指定映射文件所在的目录（使用xml注解时使用该句配置）-->
+        <!-- <property name="mappingDirectoryLocations" value="classpath:api/pojo" /> -->
+    </bean>
+</beans>

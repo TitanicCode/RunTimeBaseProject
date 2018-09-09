@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+ namespace 命名空间,路径,这个路径一般是DAO的完整路径
+ -->
+<mapper namespace="com.custom.dao.TbUserMapper">
+    <!--
+    针对查询有单独的动态SQL标签就是select
+    id 唯一标示你的动态SQL
+parameterType属性：指明查询时使用的java参数类型，推荐使用java完整类型（mybatis-3.2.7.pdf文档第17页）
+    resultType 返回类型,把查询的结果直接封装到POJO对象中去。
+    #{id} 占位符，需要动态传入参数。
+    -->
+    <select id="selectById" resultType="com.custom.pojo.TbUser" parameterType="int">
+        select
+        id,
+        username,
+        password,
+        gender,
+        authod_id AS authodid
+        from tb_user where id = #{id}
+    </select>
+
+    <insert id="insertTbUser" parameterType="com.custom.pojo.TbUser" >
+        INSERT INTO tb_user (username,gender,password,authod_id) VALUES (#{username},#{gender},#{password},#{authodId})
+    </insert>
+</mapper>
