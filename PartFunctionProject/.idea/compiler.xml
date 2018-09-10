@@ -8,12 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="fileuploaddownload" />
         <module name="ssm-init" />
+        <module name="utils" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
       <module name="fileuploaddownload" target="1.8" />
       <module name="ssm-init" target="1.8" />
       <module name="ssminit" target="1.8" />
+      <module name="utils" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

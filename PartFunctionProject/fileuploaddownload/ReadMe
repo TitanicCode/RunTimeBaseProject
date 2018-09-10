@@ -11,3 +11,6 @@ FastDFS有个重要的概念是组，即每个组里的内容是完全相同的�
             <version>1.0.RELEASE</version>
         </dependency>
 方案三：ssm框架--fileupload+MultipartResolver
+
+总结
+文件上传下载，

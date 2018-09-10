@@ -48,6 +48,8 @@
       <list>
         <option value="$PROJECT_DIR$/fileuploaddownload/pom.xml" />
         <option value="$PROJECT_DIR$/ssm-init/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/utils/pom.xml" />
       </list>
     </option>
   </component>

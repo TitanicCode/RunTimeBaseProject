@@ -1,5 +1,6 @@
 package com.custom.controller;
 
+import com.custom.utils.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by user on 2018/9/10.
@@ -27,11 +30,23 @@ public class FileController {
      */
     @RequestMapping(value="/upload", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
     @ResponseBody
-    public String upload(MultipartFile file, HttpServletRequest request){
+    public String upload(MultipartFile file, HttpServletRequest request) throws IOException {
 
         String path=request.getSession().getServletContext().getRealPath("upload");
-
         String filename = file.getOriginalFilename();
+        String suffix=filename.substring(filename.lastIndexOf("."));
+
+        //文件批次格式转换
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        Date date=new Date();
+        //文件批次
+        String batchCode=sdf.format(date);
+        //上传时间格式转换
+        sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //上传时间
+        String uploadTime=sdf.format(date);
+        //本地备份一下上传的文件
+        String newName = FileUtils.copyUploadFile(file, suffix, batchCode);
 
         File dir =new File(path,filename);
         if (!dir.exists()){
