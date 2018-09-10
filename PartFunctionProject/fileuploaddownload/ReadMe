@@ -4,4 +4,10 @@ FastDFS主要应用于分布式的上传下载，主要包含两个关键内容�
 牵线搭桥，而Storage Server则主要用来存储。
 FastDFS有个重要的概念是组，即每个组里的内容是完全相同的内容，比如当把1234.txt传到服务器1上时，FASTDFS会把这个文件同步到其他所有服务器上去，而所有服务器
 上的这个内容共同组成了一个组
-方案二：
+方案二：使用smart-upload实现（未测试）
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-upload-download</artifactId>
+            <version>1.0.RELEASE</version>
+        </dependency>
+方案三：ssm框架--fileupload+MultipartResolver
