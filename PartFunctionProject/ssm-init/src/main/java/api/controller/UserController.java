@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("user")
-@ResponseBody
 public class UserController {
     @Autowired
     private UserService userService;
 
     @RequestMapping("insertUser")
+    @ResponseBody
     public String insertUser(){
         User user=new User();
         user.setGender("女");

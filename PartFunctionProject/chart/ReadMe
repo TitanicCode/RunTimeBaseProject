@@ -1,0 +1,27 @@
+1.由于JFreeChart组件的版本、操作平台、JDK的设置等因素，在使用JFreeChart组件时，可能出出现中文乱码的现象。遇到此问题时，可通过设置乱码文字的字体
+进行解决，在此提供两种解决此问题的方法:
+(1)设置主题样式
+    在制图前，创建主题样式并指定样式中的字体，通过ChartFactory的setChartTheme()方法设置主题样式，在指定制图样式后，ChartFactory对象创建的制
+图对象将按此样式进行显示，图表中的文字将按指定的字体进行显示。
+    例如：
+    StandardChartTheme standardChartTheme = new StandardChartTheme("CN");       //创建主题样式
+    standardChartTheme.setExtraLargeFont(new Font("隶书", Font.BOLD, 20));          //设置标题字体
+    standardChartTheme.setRegularFont(new Font("宋体", Font.PLAIN, 15));             //设置图例的字体
+    standardChartTheme.setLargeFont(new Font("宋体", Font.PLAIN, 15));               //设置轴向的字体
+    ChartFactory.setChartTheme(standardChartTheme);                              //应用主题样式
+    通过上述代码设置主题样式后，再通过ChartFactory创建JFreeChart的对象，可以解决中文乱码问题。
+(2)指定乱码文字的字体
+    此方法通过指定制图对象中的中文字体解决中文乱码问题，在图中任何用到中文的地方，都要对字体进行设置，此操作将涉及到JFreeChart对象、Plot对象、坐
+标轴对象的属性设置。
+    例如：
+    JFreeChart chart = null;
+                ……                 // 省略部分代码
+    chart.getTitle().setFont(new Font("隶书",Font.BOLD,25));              // 设置标题字体
+    chart.getLegend().setItemFont(new Font("宋体",Font.BOLD,15));   // 设置图例类别字体
+    PiePlot plot = (PiePlot) chart.getPlot();                                           // 获得绘图区对象
+    plot.setLabelFont(new Font("宋体",Font.PLAIN,12));                     // 设置分类标签的字体
+    不同的制图对象类型，其相关字体的设置可能存在差异。
+
+2.综上，输出不同的图表实质上就是在操作CharUtil
+3.学习网址：
+https://blog.csdn.net/qq_28334041/article/details/70308071#%E5%9B%BE%E7%89%87%E6%B8%B2%E6%9F%93%E5%AF%B9%E8%B1%A1

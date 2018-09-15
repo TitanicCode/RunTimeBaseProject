@@ -39,6 +39,8 @@
     </properties>
   </component>
   <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/chart" />
+    <file type="web" url="file://$PROJECT_DIR$/exportchart" />
     <file type="web" url="file://$PROJECT_DIR$/fileuploaddownload" />
     <file type="web" url="file://$PROJECT_DIR$/ssm-init" />
     <file type="web" url="file://$PROJECT_DIR$/ssminit" />
@@ -50,6 +52,7 @@
         <option value="$PROJECT_DIR$/ssm-init/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/utils/pom.xml" />
+        <option value="$PROJECT_DIR$/chart/pom.xml" />
       </list>
     </option>
   </component>
