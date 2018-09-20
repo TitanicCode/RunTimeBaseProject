@@ -1,0 +1,17 @@
+{"result":[
+	{
+		"chkVal":"1",
+		"chkDisplay":"年龄",
+		"selected":true
+	},{
+		"chkVal":"2",
+		"chkDisplay":"金额"
+		
+	},{
+		"chkVal":"3",
+		"chkDisplay":"地域"
+	},{
+	"chkVal":"4",
+	"chkDisplay":"额度"
+  }
+]}

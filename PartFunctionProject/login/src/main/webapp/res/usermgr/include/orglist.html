@@ -1,0 +1,300 @@
+<div class="sectionCnt">
+    <div class="leftTree left">
+		<h4 class="treeTitle">机构管理</h4>
+		<!-- <li class="f_p left">
+			<span class="f_lab left">机构名称：</span>
+			<input type="text" id="orgname" class="f_inp left" placeholder="请输入文本..." />
+		</li>
+		<a class="f_btn" onclick="querySendApprove()">搜索</a> -->
+		<div class="marginSize">
+			<ul id="leftTree" class="ztree editTree"></ul>
+		</div>
+	</div>
+	<div class="leftTree left">
+	    <div class="left" id="orglistGrid"></div>
+	</div>
+</div>
+<script type="text/javascript" charset="utf-8">
+var ctx = $('#ctxValue').val();
+var newCount = 0;
+
+var setting = {
+	view: {
+		addHoverDom: addHoverDom,
+		removeHoverDom: removeHoverDom,
+		selectedMulti: false
+	},
+	check: {
+		enable: false
+	},
+	edit: {
+		enable: true,
+		showRenameBtn: showRenameBtn,
+        showRemoveBtn: showRemoveBtn
+	},
+	data: {
+		simpleData: {
+			enable: true
+		}
+	},
+	callback: {
+
+	}
+};
+	
+$(function(){
+	loadOrgTree(setting);
+});
+
+/**
+ * @description addHoverDom 添加
+ * @param treeId
+ * @param treeNode
+ */
+function addHoverDom(treeId, treeNode) {
+	var sObj = $("#" + treeNode.tId + "_span");
+	if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+	var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+		+ "' title='新增' onfocus='this.blur();'></span>";
+	sObj.after(addStr);
+	var btn = $("#addBtn_"+treeNode.tId);
+	if (btn) btn.bind("click", function(){
+		addOrgDealog(treeNode);
+	});
+	
+	var editBtn = $("#"+treeNode.tId+"_edit");
+	editBtn.unbind("click");
+	if (editBtn) editBtn.bind("click", function(){
+		editOrgDealog(treeNode);
+	});
+	
+	var removeBtn = $("#"+treeNode.tId+"_remove");
+	removeBtn.unbind("click");
+	if (removeBtn) removeBtn.bind("click", function(){
+		removeOrgNode(treeNode);
+	});
+};
+
+function removeOrgNode(treeNode){
+	$.ajax({
+        url: ctx + '/usermgr/deleteOrg', 
+        type: 'post',
+        data: {"orgId":treeNode.dataId},
+        dataType: 'json',
+        success: function(result){
+        	if(result.resultCode == '0'){
+        		var zTree = $.fn.zTree.getZTreeObj("leftTree");
+        		zTree.removeNode(treeNode);
+        		refreshOrgListGrid();
+        	}else{
+        		popTips('后台错误，请联系管理员！');
+        	}
+        },
+        error: function(json){ 
+        	popTips('后台错误，请联系管理员！');
+        }
+    });
+}
+
+function addOrgDealog(parentNode) {
+	addOrg(parentNode, '新增机构', function(win) {//确定
+		// 必填校验
+		if($("#publishForm input[name='orgCode']").val() == ''){
+			$("#publishForm input[name='orgCode']").focus();
+			return;
+		}
+	    var orgName = $("#publishForm input[name='orgName']").val();
+		if(orgName == ''){
+			$("#publishForm input[name='orgName']").focus();
+			return;
+		}
+		
+		$.ajax({
+	        url: ctx + '/usermgr/saveOrg', 
+	        type: 'post',
+	        data: $("#publishForm").serialize(),
+	        dataType: 'json',
+	        success: function(result){
+	        	if(result.resultCode == '0'){
+	        		win.close();
+	        		var zTree = $.fn.zTree.getZTreeObj("leftTree");
+	        		zTree.addNodes(parentNode, {id:result.dataId, pId:parentNode.id, name:orgName});
+	        		refreshOrgListGrid();
+	        	}else{
+	        		popTips('后台错误，请联系管理员！');
+	        	}
+	        },
+	        error: function(json){ 
+	        	popTips('后台错误，请联系管理员！');
+	        }
+	    });
+		
+	},function(win) {//重置
+		$('#popCommondMsgR .inputbg').val('');
+	});
+}
+
+function addOrg(parentNode, title, ensureFn,resetFn) {
+	pop({
+		id : 'popCommondMsgR',
+		width : 500,
+		height : 320,
+		url : ctx + '/res/usermgr/include/popAddOrg.html',
+		iconCls : 'iPublish',
+		title : title,
+		buttons : [{
+			'className' : 'btnyellow_43',
+			'text' : '提交',
+			'handle' : ensureFn,
+			args : [11, 222]
+		}, {
+			'className' : 'btn_43',
+			'text' : '重置',
+			'handle' : resetFn,
+			args : [11, 222]
+		},{
+			'className' : 'btn_43',
+			'text' : '取消',
+			'handle' : function(api) {
+				api.close();
+			}
+		}],
+		listeners : {
+			render : function() {
+				//下拉框
+				$("#parentOrg span").html(parentNode.name);
+				$("#parentOrg input").val(parentNode.dataId);
+			}
+		}
+	});
+}
+
+
+function editOrgDealog(treeNode) {
+	editOrg(treeNode, '编辑机构', function(win) {//确定
+		// 必填校验
+		if($("#publishForm input[name='orgCode']").val() == ''){
+			$("#publishForm input[name='orgCode']").focus();
+			return;
+		}
+	    var orgName = $("#publishForm input[name='orgName']").val();
+		if(orgName == ''){
+			$("#publishForm input[name='orgName']").focus();
+			return;
+		}
+		
+		$.ajax({
+	        url: ctx + '/usermgr/updateOrg', 
+	        type: 'post',
+	        data: $("#publishForm").serialize(),
+	        dataType: 'json',
+	        success: function(result){
+	        	if(result.resultCode == '0'){
+	        		win.close();
+	        		
+	        		treeNode.name = orgName;
+	        		var zTree = $.fn.zTree.getZTreeObj("leftTree");
+	        		zTree.updateNode(treeNode);
+	        		refreshOrgListGrid();
+	        	}else{
+	        		popTips('后台错误，请联系管理员！');
+	        	}
+	        },
+	        error: function(json){ 
+	        	popTips('后台错误，请联系管理员！');
+	        }
+	    });
+		
+	},function(win) {//重置
+		$('#popCommondMsgR .inputbg').val('');
+	});
+}
+
+function editOrg(treeNode, title, ensureFn,resetFn) {
+	pop({
+		id : 'popCommondMsgR',
+		width : 500,
+		height : 320,
+		url : ctx + '/res/usermgr/include/popAddOrg.html',
+		iconCls : 'iPublish',
+		title : title,
+		buttons : [{
+			'className' : 'btnyellow_43',
+			'text' : '提交',
+			'handle' : ensureFn,
+			args : [11, 222]
+		}, {
+			'className' : 'btn_43',
+			'text' : '重置',
+			'handle' : resetFn,
+			args : [11, 222]
+		},{
+			'className' : 'btn_43',
+			'text' : '取消',
+			'handle' : function(api) {
+				api.close();
+			}
+		}],
+		listeners : {
+			render : function() {
+				$.ajax({
+			        url: ctx + '/usermgr/getOrgById', 
+			        type: 'post',
+			        data: {"orgId":treeNode.dataId},
+			        dataType: 'json',
+			        success: function(result){
+			        	if(result.resultCode == '0'){
+			        		var org = result.data;
+			        		if(org.parentName && org.parentName.length > 0){
+			        			$("#parentOrg span").html(org.parentName);
+			        			$("#parentOrg input").val(org.id);
+			        		}else{
+			        			$("#parentOrg span").html("组织根节点");
+			        			$("#parentOrg input").val(0);
+			        		}
+			        		
+							$("#publishForm input[name='orgCode']").val(org.orgCode);
+							$("#publishForm input[name='orgName']").val(org.orgName);
+							$("#publishForm textarea[name='comments']").val(org.comments);
+							$("#publishForm input[name='id']").val(org.id);
+			        	}else{
+			        		popTips('后台错误，请联系管理员！');
+			        	}
+			        },
+			        error: function(json){ 
+			        	popTips('后台错误，请联系管理员！');
+			        }
+			    });
+			}
+		}
+	});
+}
+
+/**
+ *@description removeHoverDom 删除节点
+ * @param treeId
+ * @param treeNode
+ */
+function removeHoverDom(treeId, treeNode) {
+	$("#addBtn_"+treeNode.tId).unbind().remove();
+	$("#"+treeNode.tId+"_edit").unbind().remove();
+	$("#"+treeNode.tId+"_remove").unbind().remove();
+}
+
+
+function showRenameBtn(treeId, treeNode){
+	if(treeNode.noEditBtn != undefined && treeNode.noEditBtn){
+		return false;
+	}else{
+		return true;
+	}
+}
+
+function showRemoveBtn(treeId, treeNode){
+	if(treeNode.noRemoveBtn != undefined && treeNode.noRemoveBtn){
+		return false;
+	}else{
+		return true;
+	}
+}
+</script>

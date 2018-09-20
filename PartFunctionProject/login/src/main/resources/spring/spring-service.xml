@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+
+    <!--配置包扫描-->
+    <context:component-scan base-package="com.run.*.service"/>
+
+
+    <context:annotation-config />
+
+    <!--用来配置定时任务-->
+    <task:annotation-driven/>
+
+    <!--事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!--
+        proxy-target-class属性值决定是基于接口的还是基于类的代理被创建。如果proxy-target-class 属性值被设置为true，那么基于类的代理将起作用（这时需要cglib库）。
+        如果proxy-target-class属值被设置为false或者这个属性被省略，那么标准的JDK 基于接口的代理
+    -->
+    <tx:annotation-driven proxy-target-class="false" transaction-manager="transactionManager"/>
+
+    <!-- 通知 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!-- 传播行为 -->
+            <!-- REQUIRED：如果有事务，则在事务中执行；如果没有事务，则开启一个新的事物 -->
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="create*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <!-- SUPPORTS：如果有事务，则在事务中执行；如果没有事务，则不会开启事物 -->
+            <tx:method name="find*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="query*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="*" propagation="SUPPORTS" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 切面 -->
+    <aop:config>
+        <!-- 定义在service包或者子包里的任意方法的执行 -->
+        <aop:pointcut id="txPointCut"
+                      expression="execution(* api.service..*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointCut" />
+    </aop:config>
+
+
+</beans>

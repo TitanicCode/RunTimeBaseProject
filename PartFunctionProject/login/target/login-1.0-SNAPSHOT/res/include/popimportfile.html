@@ -1,0 +1,127 @@
+<div class="shadow"></div>
+<div class="importFileWrap">
+	<ul class="clearfix">
+	    <li class="item left">
+	        <label class="lab left">文件类型：</label>
+            <div class="left mr15" id="importFileType"></div>
+            <span style="display:none;" id="mailTypeSpan">
+                <label class="lab left">邮件类别：</label>
+                <div class="left" id="importMailType"></div>
+            </span>
+	    </li>
+		<li class="item left mt10">
+			<span class="lab left">导入文件：</span>
+			<input type="text" class="input_default w298 left" placeholder="文件名 / 标题 / 邮件正文 / 附件名">
+			<input type="file" id="file" name="file" class="hide" multipile>
+			<a href="javascript:;" class="btn_sltfile left" onclick="$('#file').click();"></a>
+			<!-- <a href="javascript:;" class="btn_downmodel left"></a> -->
+		</li>
+	</ul>
+	<a href="javascript:;" class="btn_close"></a>
+</div>
+<script>
+	$(function(){
+		var fileTypeComboData = {"result":[{"chkVal":"zip", "chkDisplay":"zip","selected":true},{"chkVal":"eml", "chkDisplay":"eml"}]};
+		combobox = Run.create("ComboBox",{
+			id : "importFileType",
+			data : fileTypeComboData,
+			width : 120,
+			listHeight : 90,
+			isMultiple : false,
+			editable : false,
+			autoLoad : true,
+			onSelect : function(combo,record){
+				if(record.text[0] == 'eml'){
+					$("#mailTypeSpan").show();
+				}else{
+					$("#mailTypeSpan").hide();
+				}
+			},
+			placeholder:"请选择",
+			listeners:{
+				render:function(){
+				}
+			}
+		});
+		var mailTypeComboBox = {"result": [{ "chkVal": "Out.box", "chkDisplay": "发件箱","selected":true}
+		                                  ,{"chkVal": "In.box", "chkDisplay": "收件箱"}
+		                                  ,{"chkVal": "Sent.box", "chkDisplay": "已发送邮件"}
+		                                  ,{"chkVal": "Spam.box", "chkDisplay": "垃圾邮箱"}
+		                                  ,{"chkVal": "Trash.box","chkDisplay": "废件箱"}
+		            				]};
+		combobox = Run.create("ComboBox",{
+			id : "importMailType",
+			data : mailTypeComboBox,
+			width : 120,
+			listHeight : 90,
+			isMultiple : false,
+			editable : false,
+			autoLoad : true,
+			onSelect : function(combo,record){
+			},
+			placeholder:"请选择",
+			listeners:{
+				render:function(){
+				}
+			}
+		});
+		
+		$('.importFileWrap .btn_close').off().on('click', function(){
+			$('.shadow, .importFileWrap').remove();
+		});
+		
+		$("#file").on("change",function(){
+			$(this).prev().val(this.value);
+			
+			var fileName = $("#file")[0].files[0].name;
+			var fileType = $("#importFileType .r-combobox-slt").text();
+			
+			debugger;
+			if(fileType == "zip"){
+				if(!new RegExp("\.zip$").test(fileName)){
+					 $('.shadow, .importFileWrap').remove();
+					 alertMsg("导入文件失败,不是zip压缩包");
+					 return false;
+				 }	
+			}else if(fileType == "eml"){
+				if(!new RegExp("\.eml$").test(fileName)){
+					 $('.shadow, .importFileWrap').remove();
+					 alertMsg("导入文件失败,不是eml文件");
+					 return false;
+				 }
+			}else{
+				$('.shadow, .importFileWrap').remove();
+				 alertMsg("导入文件失败,参数错误");
+				return false;
+			}
+			 
+			var mailType = $("#importMailType .r-combobox-slt").find("span").attr("value")
+			$('body').append('<div class="loaddingBox"><img src="res/images/loading.gif" class="loaddingImg"><div>文件上传中...</div></div>');
+			
+			var formData = new FormData();
+			formData.append("file",$("#file")[0].files[0]);
+			
+			$.ajax({
+				type:"post",
+				url:$("#base").val()+"/importFile?mailType="+mailType,
+				contentType:false,
+				processData:false,
+				data:formData,
+				success:function(data){
+					if(data.status==0){//成功
+						$('.loaddingBox').remove();
+						$('.shadow').remove();
+						//alert(data.message);
+						alertMsg(data.message);
+					}else{
+						$('.loaddingBox').remove();
+						$('.shadow').remove();
+						//alert(data.message);
+						alertMsg(data.message);
+					}
+				}
+			}); 
+			$('.importFileWrap').remove();
+		});
+	});
+</script>

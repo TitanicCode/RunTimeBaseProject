@@ -1,0 +1,274 @@
+<div class="popMsg relative">
+	<div class="inputTreeBg orgSelector">
+		<!-- <div class="mouldTitle clearfix inputsearchBox_SM">
+			<input type="text" class="specailInput left" /> 
+			<a href="javascript:;" class="searchBtn right"></a>
+		</div> -->
+		<div class="jscrollBox h190">
+			<ul class="ztree" id="orgInputTree"></ul>
+		</div>
+		<a href="javascript:;" class="saveBtn position_1">确定</a>
+	</div>
+	<div class="inputTreeBg orgSelector2">
+		<!-- <div class="mouldTitle clearfix inputsearchBox_SM">
+			<input type="text" class="specailInput left" /> 
+			<a href="javascript:;" class="searchBtn right"></a>
+		</div> -->
+		<div class="jscrollBox h190">
+			<ul class="ztree" id="orgInputTree2"></ul>
+		</div>
+		<a href="javascript:;" class="saveBtn position_1">确定</a>
+	</div>
+	<form id="publishForm" method="post">
+		<ul class="ulCommon clearfix publish">
+			<li class="left w_percent">
+				<label class="left">【账号】</label> 
+				<input type="text" class="inputbg left" name="account" /> 
+				<em class="left">*</em>
+			</li>
+			<li class="left w_percent">
+				<label class="left">【姓名】</label> 
+				<input type="text" class="inputbg left" name="name" /> 
+				<em class="left">*</em>
+			</li>
+			<li class="left w_percent">
+				<label class="left">【密码】</label> 
+				<input type="password" class="inputbg left" name="password" /> 
+				<em class="left">*</em>
+			</li>
+			<li class="left w_percent">
+				<label class="left">【确认密码】</label> 
+				<input type="password" class="inputbg left" id="confirmPassword" /> 
+				<em class="left">*</em>
+			</li>
+			<li class="left w_percent">
+				<label class="left">【手机】</label> 
+				<input type="text" class="inputbg left" name="phoneNumber" /> 
+				<em class="left">*</em>
+			</li>
+			<li class="left w_percent">
+				<label class="left">【直属领导】</label> 
+				<input type="text" class="inputbg orgInput2 left" name="orgName2" id="orgName2" /> 
+				<input type="hidden" name="orgId2" id="orgId2" /> 
+				
+				<div class="f_select left typeInfo" style="margin-left: 15px; margin-right: 5px;" id="usersSelect">
+					<div class="r-combobox-box" style="width: 176px">
+						<input type="text" placeholder="请选择" class="inputbg r-combobox-input" style="width: 146px; padding-right: 28px;">
+						<a href="#" class="r-combobox-handle"></a>
+					</div>
+				</div> 
+				
+				<input type="hidden" name="leaderid" id="leaderid"/>
+				<em class="left">*</em>
+			</li>
+			<li class="left w_percent">
+				<label class="left">【组织机构】</label> 
+				<input type="text" class="inputbg orgInput left" name="orgName" id="orgName" /> 
+				<input type="hidden" name="orgId" id="orgId" /> 
+				<em class="left">*</em>
+			</li>
+		</ul>
+	</form>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+var ctx = $('#ctxValue').val();
+var selects_api = {};//下拉框
+var orgTreeSetting = {
+	view: {
+		selectedMulti: false
+	},
+	edit: {
+		enable: false
+	},
+	data: {
+		simpleData: {
+			enable: true
+		}
+	},
+	callback: {
+	}
+};
+$(function(){
+	//showUserListGrid();
+	$('.inputTreeBg.orgSelector').addClass('hide');
+	$('.inputTreeBg.orgSelector2').addClass('hide');
+	
+	var leaderOrgId = $("#publishForm input[name='orgId2']").val();
+	if(leaderOrgId!=null && leaderOrgId!="") {
+		selects_api = getSelectDatas("usersSelect", leaderOrgId);
+	}
+});
+
+function getSelectDatas(selectId, leaderOrgId){
+	$.ajax({
+        url: ctx + '/usermgr/getUserListByLeaderOrgId',
+        type: 'post',
+        data: {"leaderOrgId":leaderOrgId},
+        dataType: 'json',
+        success: function(data){
+        	if (data.flag) {
+	        	//调用ztree
+	        	var typeInfoArray = [];
+	        	if(null != data.userList && data.userList.length > 0){
+	        			typeInfoArray = [data.userList.length];
+	            		var item;
+	            		for(var i=0; i<data.userList.length; i++){
+	            			var userLeaderId = $("#publishForm input[name='leaderid']").val();
+	            			if(userLeaderId!=null && userLeaderId!='' && userLeaderId==data.userList[i].id){
+		            			item={"chkVal": data.userList[i].id, "chkDisplay": data.userList[i].name, "selected":true }	
+	            			}else {
+		            			item={"chkVal": data.userList[i].id, "chkDisplay": data.userList[i].name }	
+	            			}
+	            			typeInfoArray[i] = item;
+	            		}
+	        	}
+	        	//清除原来内容
+	        	$("#"+selectId+"").html("");
+				//下拉框
+				var selects = [
+					{
+						id: selectId,
+						width:176,
+						data:{"result": typeInfoArray}
+					}];
+				selects_api = showSelects(selects);
+        	}
+        },
+        error: function(json){ 
+        	popTips('后台错误，请联系管理员！');
+        }
+    });
+}
+
+$('.orgInput2').off('click').on('click',function(){
+	var that = $(this);
+	var left = $(this).offset().left;
+	var top = $(this).offset().top+28;
+	var parentLeft = $(this).offsetParent().offset().left;
+	var parentTop = $(this).offsetParent().offset().top;
+	
+	$('.inputTreeBg.orgSelector2').removeClass('hide');
+	$('.inputTreeBg.orgSelector2').css('left',left-parentLeft);
+	$('.inputTreeBg.orgSelector2').css('top',top-parentTop);
+	
+	if($("#orgInputTree2").html().length <= 0){
+		loadOrgTree2("orgInputTree2", "");
+	}
+	//确定按钮
+	$('.inputTreeBg.orgSelector2 .saveBtn').die('click').live('click',function(){
+		var orgId = confirmClick(that, 'orgInputTree2', '.inputTreeBg.orgSelector2', '#orgId2');
+		/* var treeObj = $.fn.zTree.getZTreeObj('orgInputTree2');
+		var orgId ="";
+		var orgName = '';
+		if(treeObj.getSelectedNodes() != ''){
+			$.each(treeObj.getSelectedNodes(true),function(i,item){
+				inputval= item.name;
+				orgId = item.dataId;
+			});
+		}
+		$('.inputTreeBg.orgSelector2').addClass('hide');
+		that.val(inputval);
+		$("#orgId2").val(orgId); */
+		
+		selects_api = getSelectDatas("usersSelect", orgId);
+	});
+	//搜索按钮点击
+	$('.inputTreeBg.orgSelector2 .searchBtn').off('click').on('click',function(){
+		loadOrgTree2("orgInputTree2", $(this).prev().val());
+	});
+	$('.jscrollBox').jScrollPane({'autoReinitialise':true});
+});
+
+$('.orgInput').off('click').on('click',function(){
+	var that = $(this);
+	var left = $(this).offset().left;
+	var top = $(this).offset().top+28;
+	var parentLeft = $(this).offsetParent().offset().left;
+	var parentTop = $(this).offsetParent().offset().top;
+	
+	$('.inputTreeBg.orgSelector').removeClass('hide');
+	$('.inputTreeBg.orgSelector').css('left',left-parentLeft);
+	$('.inputTreeBg.orgSelector').css('top',top-parentTop);
+	
+	if($("#orgInputTree").html().length <= 0){
+		loadOrgTree2("orgInputTree", "");
+	}
+	//确定按钮
+	$('.inputTreeBg.orgSelector .saveBtn').die('click').live('click',function(){
+		var orgId = confirmClick(that, 'orgInputTree', '.inputTreeBg.orgSelector', '#orgId');
+		/* var treeObj = $.fn.zTree.getZTreeObj('orgInputTree');
+		
+		var orgId ="";
+		var orgName = '';
+		if(treeObj.getSelectedNodes() != ''){
+			$.each(treeObj.getSelectedNodes(true),function(i,item){
+				inputval= item.name;
+				orgId = item.dataId;
+			});
+		}
+		$('.inputTreeBg.orgSelector').addClass('hide');
+		that.val(inputval);
+		$("#orgId").val(orgId); */
+	});
+	//搜索按钮点击
+	$('.inputTreeBg.orgSelector .searchBtn').off('click').on('click',function(){
+		loadOrgTree2("orgInputTree", $(this).prev().val());
+	});
+	$('.jscrollBox').jScrollPane({'autoReinitialise':true});
+});
+
+function loadOrgTree2(inputTree, orgName){
+	$.ajax({
+        url: ctx+'/usermgr/queryAllOrgTreeNodes', 
+        type: 'post',
+        data: {"orgName": orgName},
+        dataType: 'json',
+        success: function(data){
+        	if('0' == data.resultCode){
+        		//调用ztree
+    			initZTree(inputTree, orgTreeSetting, data.treeNodes);	
+        	}else{
+        		popTips('后台错误，请联系管理员！');
+        	}
+        },
+        error: function(json){ 
+        	popTips('后台错误，请联系管理员！');
+        }
+    });
+}
+
+//点击别处浮框消失
+$(document).click(function(e){
+	var target = e.target;
+	if($(target).closest(".inputTreeBg").size() == 0 && $(target).closest(".orgInput").size() == 0) {
+		if(!$('.inputTreeBg.orgSelector').hasClass('hide')) {
+			$('.inputTreeBg.orgSelector').addClass('hide');
+		}
+	}
+	if($(target).closest(".inputTreeBg").size() == 0 && $(target).closest(".orgInput2").size() == 0) {
+		if(!$('.inputTreeBg.orgSelector2').hasClass('hide')) {
+			$('.inputTreeBg.orgSelector2').addClass('hide');
+		}
+	}
+});
+
+//点击确定事件
+function confirmClick(that, class1, class2, class3) {
+	var treeObj = $.fn.zTree.getZTreeObj(class1);
+	
+	var orgId ="";
+	var orgName = '';
+	if(treeObj.getSelectedNodes() != ''){
+		$.each(treeObj.getSelectedNodes(true),function(i,item){
+			orgName= item.name;
+			orgId = item.dataId;
+		});
+	}
+	$(class2).addClass('hide');
+	that.val(orgName);
+	$(class3).val(orgId);
+	return orgId;
+};
+</script>
+

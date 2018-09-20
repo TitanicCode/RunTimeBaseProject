@@ -42,8 +42,10 @@
     <file type="web" url="file://$PROJECT_DIR$/chart" />
     <file type="web" url="file://$PROJECT_DIR$/exportchart" />
     <file type="web" url="file://$PROJECT_DIR$/fileuploaddownload" />
+    <file type="web" url="file://$PROJECT_DIR$/login" />
     <file type="web" url="file://$PROJECT_DIR$/ssm-init" />
     <file type="web" url="file://$PROJECT_DIR$/ssminit" />
+    <file type="web" url="file://$PROJECT_DIR$/utils" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
@@ -53,6 +55,7 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/utils/pom.xml" />
         <option value="$PROJECT_DIR$/chart/pom.xml" />
+        <option value="$PROJECT_DIR$/login/pom.xml" />
       </list>
     </option>
   </component>

@@ -1,0 +1,12 @@
+{"result":[
+	{
+		"chkVal":"1",
+		"chkDisplay":"人数",
+		"selected":true
+	},
+	{
+		"chkVal":"2",
+		"chkDisplay":"住址非京人数"
+	}
+	
+]}

@@ -1,0 +1,68 @@
+@charset "utf-8";
+
+/*重置*/
+body,h1,h2,h3,h4,h5,h6,hr,p,dl,dt,dd,ul,ol,li,form,button,input,textarea,th,td{margin:0; padding:0;}
+body,button,input,select,textarea{font:12px/1.5 tahoma,arial,simsun,sans-serif;}
+body{background-color:#fff; color:#333; font-family:"宋体";}
+h1,h2,h3,h4,h5,h6{font-size:100%;}
+em{font-style:normal;}
+ul,ol{list-style:none;}
+a{color:#333; text-decoration:none; outline:none;}
+img{border:0;}
+button,input,select,textarea{font-size:100%;}
+table{border-collapse:collapse; border-spacing:0;}
+th{text-align:left;}
+
+
+/*浮动*/
+.left{float:left;}
+.right{float:right;}
+.clearfix:after{visibility: hidden; display: block; clear: both; height: 0; font-size: 0; content: ".";}
+.clearfix{zoom:1;}
+html,body{height:100%;}
+.relative{position: relative;}
+.hide{display: none !important;}
+/*placeholder*/
+::-webkit-input-placeholder{color:#ccc;}
+::-moz-placeholder{color:#ccc;}
+/*placeholder*/
+.loginbg ::-webkit-input-placeholder{color:#32428b;}
+.loginbg ::-moz-placeholder{color:#32428b;}
+/* ======================================= animate ========================================== */
+/*按钮动画：变形 + 变背景色 */
+.animateBtnb{
+    -webkit-transition: background-color .3s ease 0s,border-radius .3s ease 0s;
+    -moz-transition: background-color .3s ease 0s,border-radius .3s ease 0s;
+    -ms-transition: background-color .3s ease 0s,border-radius .3s ease 0s;
+    -o-transition: background-color .3s ease 0s,border-radius .3s ease 0s;
+    transition: background-color .3s ease 0s,border-radius .3s ease 0s;
+}
+.animateBtnb:hover{
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    -ms-border-radius: 12px;
+    -o-border-radius: 12px;
+    border-radius: 12px;
+}
+/*按钮动画：变色 */
+.animateColorBtn, .animateCard{
+    -webkit-transition: border-color .3s ease 0s,background-color .3s ease 0s,color .3s ease 0s;
+    -moz-transition: border-color .3s ease 0s,background-color .3s ease 0s,color .3s ease 0s;
+    -ms-transition: border-color .3s ease 0s,background-color .3s ease 0s,color .3s ease 0s;
+    -o-transition: border-color .3s ease 0s,background-color .3s ease 0s,color .3s ease 0s;
+    transition: border-color .3s ease 0s,background-color .3s ease 0s,color .3s ease 0s;
+}
+
+.liC .pieLi{background:#fff url(../images/bg_pie.png) no-repeat;} 
+/*.liC .pieLi{background:#fff  no-repeat;}屏蔽背景空白饼图*/
+.pieSize{background: url(../images/circleimg.png) no-repeat 44px 40px;}
+.pieSize.echartWin{background: url(../images/circleimg.png) no-repeat center center;}
+
+
+
+.loaddingBox{display: block; width:80px; height:66px; position: absolute; top:50%;left:50%; z-index:1000; margin-left:-40px; margin-top:-33px; color:#333;}
+.loaddingImg{display: block; width:56px; height:56px; margin-left:5px;}
+.shadow{z-index:1000;position: fixed;top:0;left:0;width:100%; height:100%;background-color: #000;filter:alpha(opacity=40);opacity: 0.5;}
+
+
+

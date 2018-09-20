@@ -1,0 +1,243 @@
+<!-- <div class="shadow"></div> -->
+<div class="relation">
+	<div id="chart-rela" class="relation-show"></div>
+	<a href="javascript:;" class="btn_close"></a>
+</div>
+
+<script>
+var ctxBase = $('#base').val();
+var relStr = relationArr.join(","); //relationArr在inbox.js中定义，存放待分析邮箱账号列表
+$(function(){
+	//获取数据
+	if(relStr.split(',').length < 2){
+		//删除子表中已移除的勾选框
+		$('.r-grid-like-check-slt').each(function(i,item){
+			$(item).removeClass('r-grid-like-check-slt')
+		});
+		alertMsg("请选择两个及两个以上的查询账号");
+	}else {
+		//console.log(relStr.split(','));
+		//打开loading
+		var _html = '<div class="shadow"></div><div class="loaddingBox"><img src="res/images/loading.gif" class="loaddingImg"><div>数据加载中...</div></div>';
+		$('.relation').append(_html);
+		$.ajax({
+			type:"post",
+			url:ctxBase+"/rel/getNeo4jRel",
+			data:{"relStr":relStr},
+			//data:{"relStr":"awang01@wesleyan.edu,wangaoxueyuan@163.com"},
+			success:function(data){
+				//debugger;
+				$('.relation').find('.loaddingBox').remove();
+				$('.relation').find('.shadow').remove();
+				//console.log(data);
+				if(data==null || data==''){
+					alertMsg("未查询到任何关系数据，请重新选择查询账号！");
+				}else {
+					if(data.nodes.length>0&&data.links.length>0){
+						chartrel(data);
+					}else{
+						alertMsg("当前查询账号之间无关系联系");
+					}
+				}
+			}
+			
+		});
+	}
+	
+	
+	
+	//关闭图标事件绑定
+	$('.relation .btn_close').off().on('click', function(){
+		$('.relation').remove();
+		//$('.shadow, .relation').remove();
+	});
+});
+
+function chartrel(data){
+	$.each(data.nodes,function(i,item){
+		//定义节点“例如：{category:0, name: '丽萨-乔布斯',value : 6,symbol:'image://'+ctxBase+'/res/images/nodebg.png',}”的属性
+		//只有name属性为后台查询数据中的节点name属性
+		item.category = 0;
+		item.value = i;
+		item.name = item.account;
+		item.symbol = 'image://'+ctxBase+'/res/images/nodebg.png';
+		item.symbolSize = [32, 32];
+	});
+	$.each(data.links,function(i,item){
+		//item.name = item.source+'->'+item.target+'发送：'+item.sendCount+'次';
+		item.name = item.sendCount;
+	});
+	var option = {
+	    title : {
+	        text: 'RelationShip',
+	        subtext: 'Powered by Run',
+	        x:'right',
+	        y:'bottom'
+	    },
+	    tooltip : {
+	        trigger: 'item',
+	        formatter:function(params){
+	        	return params[1]
+	        }
+	    },
+	    toolbox: {
+	        show : true,
+	        feature : {
+	            restore : {show: true}
+	        }
+	    },
+	    legend: {
+	        x: 'left',
+	        show:false,
+	        data:['账号']
+	    },
+	    series : [
+	        {
+	            type:'force',
+	            name : "账号关系",
+	            ribbonType: false,
+	            categories : [
+	                {
+	                    name: '账号'
+	                }
+	            ],
+	            itemStyle: {
+	                normal: {
+	                	label: {
+                            position:'bottom',
+                            show: true,
+                            textStyle: {
+                                color: '#647bc7'
+                            }
+                        },
+                        nodeStyle : {
+                           // brushType : 'both',
+                            borderColor : '#677ec8',
+                            borderWidth : 1,
+                            color:"#eef1f9"
+                        },
+                        linkStyle: {
+                            type: 'curve',
+                            color:'#d6d9e4',
+                            width:1
+                        }
+	                },
+	                emphasis: {
+	                	label: {
+                            show: false
+                            // textStyle: null      // 默认使用全局文本样式，详见TEXTSTYLE
+                        },
+                        nodeStyle : {
+                            borderColor : '#677ec8',
+                            borderWidth : 3
+                        },
+                        linkStyle : {
+                            type: 'curve',
+                            color:'#000',
+                            width:3
+                        }
+	                }
+	            },
+	            useWorker: false,
+	            minRadius : 20,
+	            maxRadius : 20,
+	            gravity: 1.1,
+	            //linkSymbol:'arrow',
+	            scaling: 1.1,
+	            roam: 'move',
+	            nodes:
+	            	data.nodes,
+	            	//[{name:'73'},{name:'65'}],
+	            	/* [
+	                {category:0, name: '乔布斯', value : 5, symbol:'image://'+ctxBase+'/res/images/nodebg.png',label: '乔布斯\n（主要）'},
+	                {category:0, name: '丽萨-乔布斯',value : 6,symbol:'image://'+ctxBase+'/res/images/nodebg.png',}
+	            	], */ 
+	            links :
+	            	data.links
+	            	//[{source:'65',target:'73',"sendCount":1}]
+	            	/* [
+	                {source : '丽萨-乔布斯', target : '乔布斯', weight : 1, name: '2'},
+	                {source : '乔布斯', target : '丽萨-乔布斯', weight : 2, name: '3'}
+	            	] */   
+	        }
+	    ]
+	};
+
+	//路径配置
+	require.config({
+		paths: {
+			echarts: ctxBase+"/res/financial/js/build/dist"
+		}
+	});
+	// 使用
+	require(
+		[
+			'echarts',
+			'echarts/chart/map',
+			'echarts/chart/bar',
+			'echarts/chart/pie',
+			'echarts/chart/line',
+			'echarts/chart/radar',
+			'echarts/chart/force'
+		],function(ec,config,force){
+			var myChart = ec.init(document.getElementById("chart-rela"));
+			myChart.setOption(option);
+			
+			myChart.on("click", focus);
+			/* myChart.on("forceLayoutEnd", function () {
+			    console.log(myChart.chart.force.getPosition());
+			}); */
+		});
+	}
+
+	function focus(param) {
+	    var data = param.data;
+	    var links = option.series[0].links;
+	    var nodes = option.series[0].nodes;
+	    if (
+	        data.source !== undefined
+	        && data.target !== undefined
+	    ) { //点击的是边
+	        var sourceNode = nodes.filter(function (n) {return n.name == data.source})[0];
+	        var targetNode = nodes.filter(function (n) {return n.name == data.target})[0];
+	        console.log("选中了边 " + sourceNode.name + ' -> ' + targetNode.name + ' (' + data.weight + ')');
+	    } else { // 点击的是点
+	        console.log("选中了" + data.name + '(' + data.value + ')');
+	    }
+	}
+	
+	function alertMsg(msg){
+		$('#pop').remove();
+		$('#chart-rela').append('<div id="pop" class="w208"></div>');
+		var window = Run.create('Window',{
+			id:'pop',
+			width:280,
+			height:180,
+			iconCls:'',
+			title: "提示",
+			mask:true,
+			message:'<div class="msgBox"><span>'+msg+'</span></div>',
+			buttons:[{
+				'className':'btn_save',
+				'text':'确定',
+				'handle': function (button) {
+					$('.relation .btn_close').trigger("click");
+					button.close();
+				}
+			},{
+				'className':'btn_cancel',
+				'text':'取消',
+				'handle': function (button) {
+					$('.relation .btn_close').trigger("click");
+					button.close();
+				}
+			}],
+			listeners:{
+				render:function(){
+
+				}
+			}
+		});
+		
+	}
+</script>

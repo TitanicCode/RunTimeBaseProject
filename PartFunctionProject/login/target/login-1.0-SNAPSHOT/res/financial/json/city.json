@@ -1,0 +1,11 @@
+{"result":[
+	{
+		"chkVal":"1",
+		"chkDisplay":"全国",
+		"selected":true
+	},{
+		"chkVal":"2",
+		"chkDisplay":"北京"
+		
+	}
+]}

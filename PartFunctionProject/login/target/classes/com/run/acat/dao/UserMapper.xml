@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.run.acat.dao.UserMapper">
+
+    <select id="getUserByAccount" parameterType="java.lang.String" resultType="com.run.acat.entity.User">
+        SELECT
+			t3.id,
+			t3.account,
+			t3.name,
+			t3.modifiedDate,
+			t3.lockout,
+			t3.phoneNumber,
+			t3.leaderid,
+			t3.delflag,
+			t3.passwordmd,
+			t3.logindate,
+			t3.loginip,
+			t3.loginmac,
+			(SELECT t2.orgname FROM acat_org t2, acat_orgs_users t1 WHERE t1.orgid = t2.id AND t1.userid = t3.id) AS orgName
+		FROM acat_user t3
+		WHERE 1 = 1
+		AND t3.delflag = '0'
+		AND t3.account = #{userAccount}
+    </select>
+
+</mapper>

@@ -1,0 +1,23 @@
+<div class="sectionTitle clearfix">
+	<h2 class="tit iMywork1 left">用户管理</h2>
+	<a href="javascript:;" onclick="addEditUser('','创建用户');" class="right addAuthority">创建用户</a>
+</div>
+
+<div class="sectionForm">
+	<ul class="clearfix">
+		<li class="f_p left">
+			<span class="f_lab left">用户名：</span>
+			<input type="text" id="username" class="f_inp left" placeholder="请输入文本..." />
+		</li>
+	</ul>
+	<a class="f_btn" id="search" onclick="showUserListGrid()">搜索</a>
+</div>
+<div class="sectionCnt">
+	<div id="userlistGrid"></div>
+</div>
+<script type="text/javascript" charset="utf-8">
+var ctx = $('#ctxValue').val();
+$(function(){
+	showUserListGrid();
+});
+</script>

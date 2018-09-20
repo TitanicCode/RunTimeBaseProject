@@ -1,0 +1,131 @@
+<div class="totalDiv">
+	<div class="itemDiv">
+		<ul class="totalUl clearfix">
+			<li class="mailTotal left">
+				<span class="count" id="account_num">0</span>
+				<span>邮箱账户总数</span>
+			</li>
+			<li class="inbox left">
+				<span class="count" id="in_num">0</span>
+				<span>收件箱</span>
+			</li>
+			<li class="sendbox left">
+				<span class="count" id="out_num">0</span>
+				<span>发件箱</span>
+			</li>
+			<li class="delbox left">
+				<span class="count" id="laji_num">0</span>
+				<span>垃圾邮件</span>
+			</li>
+			<li class="backbox left">
+				<span class="count" id="feijian_num">0</span>
+				<span>废件箱</span>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="totalDiv h70">
+	<div class="itemDiv">
+		<div class="searchWrap">
+			<ul class="mt10 h54 clearfix">
+				<li class="item left">
+					<input type="text" class="input_default w328 left" placeholder="主题以及正文搜索" id="full_text">
+					<a href="javascript:;" class="btn_showL J_btn_showL left"></a>
+				</li>
+				<li class="item J_item left hide">
+					<span class="lab left">时间：</span>
+					<input type="text" class="input_default selectTime left j_toTimeDD" id="startTime"/>
+					<span class="sep left">-</span>
+					<input type="text" class="input_default selectTime left j_toTimeDD" id="endTime"/>
+				</li>
+				<li class="item J_item left hide">
+					<span class="lab left">邮箱账户：</span>
+					<input type="text" class="input_default w128 left" placeholder="请输入" id="account"/>
+				</li>
+				<li class="item J_item left hide">
+					<span class="lab left">收件人：</span>
+					<input type="text" class="input_default w128 left" placeholder="请输入" id="receiverAddr"/>
+				</li>
+				<li class="item J_item left hide">
+					<span class="lab left">发件人：</span>
+					<input type="text" class="input_default w128 left" placeholder="请输入" id="senderAddr"/>
+				</li>
+				<li class="item J_btnLi mr10 mtf2 ml100 left">
+					<a href="javascript:;" class="btn_search mr15 left" id="e_search"></a>
+				    <!-- <a href="javascript:;" class="btn_relationanaly mr15 left" onclick="getNeo4jRelation(this, 'res')" ></a> --> 
+				    <a href="javascript:;" class="btn_relationanaly mr15 left" onclick="getRtRelation(this, 'res')" ></a> 
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="staticTable">
+	<table class="staticT">
+		<colgroup>
+			<col  width="40px" />
+			<col width="190px"/>
+			<col  width="200px"/>
+			<col width="300px"/>
+			<col width="300px"/>
+			<col/>
+			<col />
+		</colgroup>
+		<thead>
+			<tr>
+				<th><span class="J_chkAll chkAll"></span></th>
+				<th>邮箱账户</th>
+				<th>
+					<div class="f_select  clearfix" id="mailType"></div>
+				</th>
+				<th>收件人</th>
+				<th>发件人</th>
+				<th>主题 </th>
+				<th>日期 <a href="javascript:;" class="btn_sort_d" onclick="$(this).toggleClass('btn_sort_u')"></a></th>
+			</tr>
+		</thead>
+	</table>
+</div>
+<div class="staticTable" id="staticTable">
+	<table id="mailAcount" class="staticT">
+		<colgroup>
+			<col  width="40px" />
+			<col width="190px"/>
+			<col />
+		</colgroup>
+		<tbody id="account_list">
+		</tbody>
+	</table>
+</div>
+<div class="contentDiv hide" id="contentDiv" style="-moz-user-select:none; -khtml-user-select:none; user-select:none;">
+	<div class="contentItemDiv">
+		<dl class="baseMsg">
+			<dt>
+				<label>标题：</label><span id="email_title"></span>
+			</dt>
+			<dt>
+				<div class="clearfix">
+					<label class="left">收件人：</label><span class="left w1100 wordBreak" id="email_rec"></span>
+				</div>
+				<div class="clearfix">
+					<label class="left">附件：</label><span id="email_att" class="left label_sm wordBreak w1100"></span>
+				</div>
+			</dt>
+		</dl>
+		<div id="fileContent" class="fileContent">
+			<div class="contentMsg" id="email_content">
+			</div>
+		</div>
+	</div>
+	<a href="javascript:;" class="btn_close1"></a>
+</div>
+
+<script type="text/javascript">
+//点击别处浮框消失
+$(document).click(function(e){
+	var target = e.target;
+	if($(target).closest(".contentDiv").size() == 0 &&
+			$(target).closest(".r-grid-center").size() == 0){
+		$('.contentDiv').addClass('hide');
+	}
+});
+</script>

@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="chart" />
         <module name="fileuploaddownload" />
+        <module name="login" />
         <module name="ssm-init" />
         <module name="utils" />
       </profile>
@@ -16,6 +17,7 @@
       <module name="chart" target="1.8" />
       <module name="exportchart" target="1.8" />
       <module name="fileuploaddownload" target="1.8" />
+      <module name="login" target="1.8" />
       <module name="ssm-init" target="1.8" />
       <module name="ssminit" target="1.8" />
       <module name="utils" target="1.8" />

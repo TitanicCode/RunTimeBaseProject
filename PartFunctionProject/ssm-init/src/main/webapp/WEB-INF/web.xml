@@ -4,6 +4,18 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
+    <!--可写可不写，这个只是给开发人员提供的一个说明信息-->
+    <!--<display-name>acat</display-name>-->
+
+    <!--欢迎页-->
+    <!--<welcome-file-list>-->
+        <!--<welcome-file>login.jsp</welcome-file>-->
+    <!--</welcome-file-list>-->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404.jsp</location>
+    </error-page>
+
     <!-- spring：配置spring容器监听器 -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
@@ -16,27 +28,28 @@
 
     <!-- 配置SpringMVC的 DispatcherServlet-->
     <servlet>
+        <!--配置SpringMVC的 DispatcherServlet,相当于前置服务器baseServlet-->
         <servlet-name>springmvc</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-
-        <!-- 配置 DispatcherServlet 的一个初始化参数: 配置 springmvc 配置文件的位置和名称 -->
-        <!--
-            实际上也可以不通过 contextConfigLocation 来配置 springmvc 的配置文件, 而使用默认的.
-            默认的配置文件为: /WEB-INF/<servlet-name>-servlet.xml
-            如：springmvc-servlet.xml
-        -->
+        <!--配置 DispatcherServlet 的一个初始化参数: 配置 springmvc 配置文件的位置和名称 -->
+        <!--实际上也可以不通过 contextConfigLocation 来配置 springmvc 的配置文件, 而使用默认的.
+           默认读取的配置文件为: /WEB-INF/<servlet-name>（即上面设置的springmvc）-servlet.xml
+           如：springmvc-servlet.xml。所以只需将配置文件放到WEB-INF下就无需再写<init-param>配置了-->
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>classpath:spring/springmvc-servlet.xml</param-value>
-            <!-- <param-value>/WEB-INF/springmvc-servlet.xml</param-value> -->
         </init-param>
-
+        <!--设置一打开Tomcat就运行这个servlet-->
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <!-- 所有的客户端请求由 DispatcherServlet处理：前端控制器模式-->
     <servlet-mapping>
         <servlet-name>springmvc</servlet-name>
+        <!--/*拦截的会走服务器并进行响应，不拦截的会直接放行直接走去页面显示*/
+            /* 拦截所有请求并响应
+            /  拦截所有请求并响应，不包括 jsp
+            *.do 或 *.action 只拦截 do 或 action 扩展名的请求并响应-->
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
@@ -49,6 +62,7 @@
             <param-name>encoding</param-name>
             <param-value>utf-8</param-value>
         </init-param>
+        <!--forceEncoding用来设置是否理会 request.getCharacterEncoding()方法，设置为true则强制覆盖之前的编码格式。-->
         <init-param>
             <param-name>forceEncoding</param-name>
             <param-value>true</param-value>
@@ -59,6 +73,32 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!--ssm整合shiro中引入过滤器-->
+    <!-- 配置Shiro过滤器,先让Shiro过滤系统接收到的请求 -->
+    <!-- 这里filter-name必须对应applicationContext.xml或者 resource 文件夹下spring配置文件中配置过滤器相关的定义的<bean id="shiroFilter"/> -->
+    <!-- 使用[/*]匹配所有请求,保证所有的可控请求都经过Shiro的过滤 -->
+    <!-- 通常会将此filter-mapping放置到最前面(即其他filter-mapping前面),以保证它是过滤器链中第一个起作用的 -->
+    <!--<filter>-->
+        <!--<filter-name>shiroFilter</filter-name>     <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
+        <!--<init-param>-->
+            <!--<param-name>targetFilterLifecycle</param-name>-->
+            <!--<param-value>true</param-value>-->
+        <!--</init-param>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>shiroFilter</filter-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
+
+    <!--jfreeChart生成图表所用-->
+    <!--<servlet>-->
+    <!--<servlet-name>DisplayChart</servlet-name>-->
+    <!--<servlet-class>org.jfree.chart.servlet.DisplayChart</servlet-class>-->
+    <!--</servlet>-->
+    <!--<servlet-mapping>-->
+    <!--<servlet-name>DisplayChart</servlet-name>-->
+    <!--<url-pattern>/chart</url-pattern>-->
+    <!--</servlet-mapping>-->
 
     <!--
      配置 org.springframework.web.filter.HiddenHttpMethodFilter: 可以把 POST 请求转为 DELETE 或  PUT 请求

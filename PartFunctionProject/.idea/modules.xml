@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/chart/chart.iml" filepath="$PROJECT_DIR$/chart/chart.iml" />
       <module fileurl="file://$PROJECT_DIR$/fileuploaddownload/fileuploaddownload.iml" filepath="$PROJECT_DIR$/fileuploaddownload/fileuploaddownload.iml" />
+      <module fileurl="file://$PROJECT_DIR$/login/login.iml" filepath="$PROJECT_DIR$/login/login.iml" />
       <module fileurl="file://$PROJECT_DIR$/ssm-init/ssm-init.iml" filepath="$PROJECT_DIR$/ssm-init/ssm-init.iml" />
       <module fileurl="file://$PROJECT_DIR$/utils/utils.iml" filepath="$PROJECT_DIR$/utils/utils.iml" />
     </modules>

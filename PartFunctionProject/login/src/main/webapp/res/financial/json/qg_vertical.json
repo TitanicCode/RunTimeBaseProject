@@ -1,0 +1,23 @@
+{"result":[
+	{
+		"chkVal":"1",
+		"chkDisplay":"人数",
+		"selected":true
+	},
+	{
+		"chkVal":"2",
+		"chkDisplay":"盈利金额(万)"
+		
+	},
+	{
+		"chkVal":"3",
+		"chkDisplay":"受损金额(万)"
+		
+	},
+	{
+		"chkVal":"4",
+		"chkDisplay":"投资金额(万)"
+		
+	}
+	
+]}
