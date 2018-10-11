@@ -80,7 +80,7 @@
             <a href="javascript:;" class="indexBtn" id="financial-parser" tabindex="-1">金融分析工具</a>
         </div>
     </div>
-    <a href="javascript:;" class="logout" id="logout" tabindex="-1">注销退出</a>
+    <a href="javascript:;" class="logout" id="logout" tabindex="-1">退出</a>
 </div>
 </body>
 
@@ -101,6 +101,7 @@
         if($.cookie("rememberme")){
             $("#rem .chkBox:first").addClass("slt");
         }
+
         //点击登陆
         $('#login').off('click').on('click',function(){
 

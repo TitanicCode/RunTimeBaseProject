@@ -35,7 +35,7 @@ public class UserController {
             result.put("message", "登陆成功");
 
             HttpSession session=request.getSession();
-            session.setAttribute(user.getAccount()+"user",userService.getUserByAccount(user.getAccount()));
+            session.setAttribute("user",userService.getUserByAccount(user.getAccount()));
         }else{
             result.put("status", "0");
             result.put("message", "用户名或密码错误");

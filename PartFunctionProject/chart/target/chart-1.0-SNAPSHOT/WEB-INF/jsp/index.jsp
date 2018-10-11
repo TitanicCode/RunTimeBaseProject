@@ -29,5 +29,115 @@
 
 <img src="<%=graphURL%>" border="1">
 
+
+
+    <%--生成饼图的jsp代码--%>
+    <%--<body> --%>
+    <%--<%  //通过saveAsJPEG()方法生成饼状图的JPEG图像，并返回一个临时图像名称--%>
+               <%--String filename = ServletUtilities.saveChartAsJPEG(ChartUtil.createChart(),400,300,session);--%>
+               <%--String chartUrl = path+"/DisplayChart?filename="+filename;//获取生成图像的相对路径--%>
+     <%--%>--%>
+     <%--<img alt="" src="<%=chartUrl %>">--%>
+  <%--</body>--%>
+
+
+    <%--生成柱状图--%>
+<%--<%@ page language="java" import="java.util.*" pageEncoding="GBK"%>--%>
+<%--<%@ page import="org.jfree.chart.servlet.ServletUtilities"  %>--%>
+<%--<%@ page import="com.lh.util.ChartUtil"  %>--%>
+<%--<%--%>
+    <%--String path = request.getContextPath();--%>
+    <%--String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";--%>
+<%--%>--%>
+<%--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">--%>
+<%--<html>--%>
+<%--<head>--%>
+    <%--<base href="<%=basePath%>">--%>
+    <%--<title>生成柱状图</title>--%>
+    <%--<meta http-equiv="pragma" content="no-cache">--%>
+    <%--<meta http-equiv="cache-control" content="no-cache">--%>
+    <%--<meta http-equiv="expires" content="0">--%>
+    <%--<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">--%>
+    <%--<meta http-equiv="description" content="This is my page">--%>
+    <%--<!----%>
+    <%--<link rel="stylesheet" type="text/css" href="styles.css">--%>
+    <%---->--%>
+<%--</head>--%>
+<%--<body>--%>
+<%--<%--%>
+    <%--String filename = ServletUtilities.saveChartAsJPEG(ChartUtil.createChart(),400,300,session);--%>
+    <%--String chartUrl = path+"/DisplayChart?filename="+filename;--%>
+<%--%>--%>
+<%--<img alt="" src="<%=chartUrl %>">--%>
+<%--</body>--%>
+<%--</html>--%>
+
+    <%--生成区域图--%>
+<%--<%@ page language="java" import="java.util.*" pageEncoding="GBK"%>--%>
+<%--<%@ page import="org.jfree.chart.servlet.ServletUtilities"  %>--%>
+<%--<%@ page import="com.lh.util.ChartUtil"  %>--%>
+<%--<%--%>
+    <%--String path = request.getContextPath();--%>
+    <%--String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";--%>
+<%--%>--%>
+
+<%--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">--%>
+<%--<html>--%>
+<%--<head>--%>
+    <%--<base href="<%=basePath%>">--%>
+
+    <%--<title>生成区域图</title>--%>
+    <%--<meta http-equiv="pragma" content="no-cache">--%>
+    <%--<meta http-equiv="cache-control" content="no-cache">--%>
+    <%--<meta http-equiv="expires" content="0">--%>
+    <%--<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">--%>
+    <%--<meta http-equiv="description" content="This is my page">--%>
+    <%--<!----%>
+    <%--<link rel="stylesheet" type="text/css" href="styles.css">--%>
+    <%---->--%>
+<%--</head>--%>
+
+<%--<body>--%>
+<%--<%--%>
+    <%--String filename = ServletUtilities.saveChartAsJPEG(ChartUtil.createChart(),400,300,session);--%>
+    <%--String chartUrl = path+"/DisplayChart?filename="+filename;--%>
+<%--%>--%>
+<%--<img alt="" src="<%=chartUrl %>">--%>
+<%--</body>--%>
+<%--</html>--%>
+
+<%--<title>生成时序图</title>--%>
+<%--<%@ page language="java" import="java.util.*" pageEncoding="GBK"%>--%>
+<%--<%@ page import="org.jfree.chart.servlet.ServletUtilities"  %>--%>
+<%--<%@ page import="com.lh.util.*"  %>--%>
+<%--<%--%>
+    <%--String path = request.getContextPath();--%>
+    <%--String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";--%>
+<%--%>--%>
+
+<%--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">--%>
+<%--<html>--%>
+<%--<head>--%>
+    <%--<base href="<%=basePath%>">--%>
+
+    <%--<title>生成时序图</title>--%>
+    <%--<meta http-equiv="pragma" content="no-cache">--%>
+    <%--<meta http-equiv="cache-control" content="no-cache">--%>
+    <%--<meta http-equiv="expires" content="0">--%>
+    <%--<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">--%>
+    <%--<meta http-equiv="description" content="This is my page">--%>
+    <%--<!----%>
+    <%--<link rel="stylesheet" type="text/css" href="styles.css">--%>
+    <%---->--%>
+<%--</head>--%>
+
+<%--<body>--%>
+<%--<%--%>
+    <%--String filename = ServletUtilities.saveChartAsJPEG(TimeSeriesUtil.getTimeSeriesChart(),700,400,session);--%>
+    <%--String chartUrl = path+"/DisplayChart?filename="+filename;--%>
+<%--%>--%>
+<%--<img alt="" src="<%=chartUrl %>">--%>
+<%--</body>--%>
+<%--</html>--%>
 </body>
 </html>
